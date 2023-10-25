@@ -1,0 +1,27 @@
+task1:
+Write a DB Query.
+Database Schema:
+Consider an e-commerce database with the following schema.
+● Users Table: (user_id, username, email, registration_date)
+● Products Table: (product_id, product_name, price, stock_quantity)
+● Orders Table: (order_id, user_id, order_date)
+● OrderItems Table: (order_item_id, order_id, product_id, quantity)
+
+SELECT
+    Users.username,
+    Users.email,
+    SUM(order_idi.quantity * Products.price) AS total_amount_spent
+FROM
+    Users Users
+JOIN
+    Orders o ON Users.user_id = o.user_id
+JOIN
+    OrderItems oi ON o.order_id = oi.order_id
+JOIN
+    Products p ON oi.product_id = p.product_id
+WHERE
+    o.order_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+GROUP BY
+    Users.user_id
+HAVING
+    total_amount_spent > 0;
